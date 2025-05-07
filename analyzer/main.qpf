@@ -1,0 +1,7 @@
+# quartus project file (QPF)
+
+QUARTUS_VERSION = "23.1"
+DATE = "17:56:04  May 07, 2025"
+
+# Revisions
+PROJECT_REVISION = "main"
