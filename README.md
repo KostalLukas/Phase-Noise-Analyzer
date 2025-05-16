@@ -7,7 +7,7 @@
 - AD8422 variable gain amplifier 1x, 10x, 100x
 - LTC1569 low pass filter 300 kHz cutoff
 - AD8137 differential ADC driver
-- AD4001 ADC 16bit resolution]
+- AD4001 ADC 16bit resolution
 - FTDI 2232 USB interface
 
 ### Theory
