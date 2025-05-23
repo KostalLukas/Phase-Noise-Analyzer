@@ -1,20 +1,20 @@
 # paths of SystemVerilog source files for compilation
-VERILOG_SOURCES = $(PWD)/ShifterTest.sv $(PWD)/Shifter.sv $(PWD)/Cordic.sv $(PWD)/FirFSM.sv $(PWD)/TickGen.sv
+VERILOG_SOURCES = $(PWD)/TickGen.sv $(PWD)/ADC.sv $(PWD)/DAC.sv $(PWD)/CORDIC.sv $(PWD)/Mixer.sv $(PWD)/NCO.sv $(PWD)/PLL.sv
 
 # name of toplevel SystemVerilog file
-TOPLEVEL=ShifterTest
+# TOPLEVEL = 
 
 # name of Python test file
-MODULE=ShifterTest
+# MODULE =
 
 # simulation using Verilator and Cocotb
-SIM=verilator
-COCOTB_HDL_TIMEPRECISION = 1ns
-EXTRA_ARGS += --trace --trace-structs
+# SIM=verilator
+# COCOTB_HDL_TIMEPRECISION = 1ns
+# EXTRA_ARGS += --trace --trace-structs
 
-include $(shell cocotb-config --makefiles)/makefile.sim
+# include $(shell cocotb-config --makefiles)/makefile.sim
 
-PROJECT = main
+PROJECT = Main
 
 QUARTUS_CPF = docker run --platform linux/amd64 -it --rm -v .:/build didiermalenfant/quartus:22.1-apple-silicon quartus_cpf
 QUARTUS_SH  = docker run --platform linux/amd64 -it --rm -v .:/build didiermalenfant/quartus:22.1-apple-silicon quartus_sh
