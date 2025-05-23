@@ -1,6 +1,7 @@
 # paths of SystemVerilog source files for compilation
-VERILOG_SOURCES = $(PWD)/TickGen.sv $(PWD)/ADC.sv $(PWD)/DAC.sv $(PWD)/CORDIC.sv $(PWD)/Mixer.sv $(PWD)/NCO.sv $(PWD)/PLL.sv
-
+VERILOG_SOURCES = $(PWD)/TickGen.sv $(PWD)/ADC.sv $(PWD)/DAC.sv $(PWD)/CORDIC.sv $(PWD)/Mixer.sv $(PWD)/NCO.sv \
+				  $(PWD)/PLL.sv $(PWD)/CIC.sv $(PWD)/FIR.sv
+				
 # name of toplevel SystemVerilog file
 # TOPLEVEL = 
 

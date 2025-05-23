@@ -1,13 +1,12 @@
 // module for a numerically controlled oscillator
 module NCO #(
     parameter amp = 32000
-    )
-    (
+    ) (
     input logic clk,
     input logic rst,
     input logic tick, 
-    input logic num_i,
-    output logic signal_o
+    input logic signed [15:0] num_i,
+    output logic signed [15:0] signal_o
     );
 
     // phase accumulator register
