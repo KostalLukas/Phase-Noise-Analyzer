@@ -2,39 +2,45 @@
 module NCO #(
     parameter amp = 32000
     ) (
-    input logic clk,
-    input logic rst,
-    input logic tick, 
-    input logic signed [15:0] num_i,
+    input logic clk_i,
+    input logic rst_i,
+    input logic tick_i, 
+    input logic signed [15:0] freq_i,
+    input logic signed [15:0] ofst_i,
     output logic signed [15:0] signal_o
     );
 
     // phase accumulator register
+    logic unsigned [15:0] step;
     logic unsigned [15:0] phase;
-    always_ff @(posedge clk)
+    always_ff @(posedge clk_i)
     begin
-        if (rst == 1) begin
+        if (rst_i == 1) begin
+            step <= 0;
             phase <= 0;
         end
-        else begin
-            phase <= phase + num_i;
+        else if (tick_i == 1) begin
+            step <= step + freq_i;
+            phase <= phase + step + ofst_i;
         end 
     end
 
     // cordic algorithm using finite state machine
-    logic signed [15:0] cos;
-    logic signed [15:0] sin;
+    logic signed [15:0] signal_sin;
+    logic signed [15:0] signal_cos;
     CORDIC cordic(
-        .clk(clk),
-        .reset(rst),
-        .tick(tick),
+        .clk(clk_i),
+        .reset(rst_i),
+        .tick(tick_i),
 
         .angle(phase),
         .x_i(amp),
 
-        .x_o(sin),
-        .y_o(cos)
+        .x_o(signal_sin),
+        .y_o(signal_cos)
     );
+
+    assign signal_o = signal_sin;
 
 endmodule
 

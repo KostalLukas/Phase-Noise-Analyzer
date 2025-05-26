@@ -1,8 +1,8 @@
 
 // cascaded intergrator comb filter decimator 
 module CICdec #(
-    parameter num_of_stages     =  4, // number of stages
-    parameter decimation_factor =  5, // reduction factor
+    parameter num_of_stages     =  4,
+    parameter decimation_factor =  5,
     parameter num_bits_input    = 16,
     parameter num_bits_output   = 16
 )(
@@ -79,10 +79,10 @@ endmodule
 
 // cascaded integrator comb filter interpolator
 module CICint #(
-    parameter num_of_stages        =  4, // the number of stages
+    parameter num_of_stages        =  4,
+    parameter interpolation_factor =  5,
     parameter num_bits_input       = 16,
-    parameter num_bits_output      = 16,
-    parameter interpolation_factor =  20 // (only used to calculate the number of bits needed internally)
+    parameter num_bits_output      = 16
 )(
     input logic         clk_i,
     input logic         rst_i,
