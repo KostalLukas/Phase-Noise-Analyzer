@@ -105,7 +105,7 @@ module Main(
       .rst_i(rst),
       .tick_i(tick_dec),
       .signal_i(signal_phs),
-      .signal_o()
+      .signal_o(phase_lp)
    );
 
    // shot controller
@@ -121,7 +121,7 @@ module Main(
          HEX0 = ~8'd001;
       end
       else begin
-         signal_int <= signal_phs;
+         signal_int <= phase_lp;
          HEX0 = ~8'd008;
       end
    end
