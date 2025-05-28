@@ -16,7 +16,7 @@ module NCO #(
     always_ff @(posedge clk_i)
     begin
         if (rst_i == 1) begin
-            step <= 0;
+            step <= 13107; // 40 kHz
             phase <= 0;
         end
         else if (tick_i == 1) begin
@@ -40,7 +40,7 @@ module NCO #(
         .y_o(signal_cos)
     );
 
-    assign signal_o = signal_sin;
+    assign signal_o = signal_cos;
 
 endmodule
 

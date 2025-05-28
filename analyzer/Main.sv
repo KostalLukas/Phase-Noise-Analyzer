@@ -46,12 +46,11 @@ module Main(
 
    // display text
    always_comb begin
-        HEX5 = ~8'd000; // none
-        HEX4 = ~8'd064; // -
-        HEX3 = ~8'd115; // P
-        HEX2 = ~8'd084; // N
-        HEX1 = ~8'd119; // A
-        HEX0 = ~8'd064; // -
+        HEX5 = ~8'd064; // -
+        HEX4 = ~8'd115; // P
+        HEX3 = ~8'd084; // N
+        HEX2 = ~8'd119; // A
+        HEX1 = ~8'd064; // -
    end
 
    // divide 50 MHz clock signal to 1 MHz for interfacing ADC and DAC
@@ -74,7 +73,7 @@ module Main(
       .is_idle_o()
    );
    
-   // CIC decimator filter
+   // CIC decimator filter (stages=4, factor=5)
    CICdec decimator (
       .clk_i(clk),
       .rst_i(rst),
@@ -84,7 +83,7 @@ module Main(
       .signal_o(signal_dec)
    );
 
-   // need FIR compenstor filter for CIC
+   // compensation filter for CIC decimator
 
    // phase locked loop oscillator
    PLL reference (
@@ -101,7 +100,7 @@ module Main(
    FIR #(
       .stages(229),
       .coeffs('{-0, 0, 0, 0, -0, -1, -2, -3, -3, 0, 4, 8, 10, 7, -0, -10, -19, -22, -15, 0, 20, 36, 40, 28, -0, -34, -61, -67, -45, 0, 55, 96, 105, 70, -0, -83, -146, -157, -105, 0, 122, 212, 227, 150, -0, -173, -299, -319, -210, 0, 240, 413, 439, 288, -0, -326, -558, -592, -387, 1, 435, 743, 785, 512, -1, -572, -977, -1030, -670, 1, 746, 1271, 1338, 870, -1, -966, -1645, -1731, -1125, 1, 1249, 2127, 2239, 1457, -1, -1621, -2766, -2919, -1904, 1, 2132, 3653, 3873, 2541, -1, -2883, -4980, -5330, -3536, 2, 4120, 7239, 7903, 5366, -2, -6644, -12156, -13956, -10103, 2, 15253, 32975, 49538, 61289, 65536, 61289, 49538, 32975, 15253, 2, -10103, -13956, -12156, -6644, -2, 5366, 7903, 7239, 4120, 2, -3536, -5330, -4980, -2883, -1, 2541, 3873, 3653, 2132, 1, -1904, -2919, -2766, -1621, -1, 1457, 2239, 2127, 1249, 1, -1125, -1731, -1645, -966, -1, 870, 1338, 1271, 746, 1, -670, -1030, -977, -572, -1, 512, 785, 743, 435, 1, -387, -592, -558, -326, -0, 288, 439, 413, 240, 0, -210, -319, -299, -173, -0, 150, 227, 212, 122, 0, -105, -157, -146, -83, -0, 70, 105, 96, 55, 0, -45, -67, -61, -34, -0, 28, 40, 36, 20, 0, -15, -22, -19, -10, -0, 7, 10, 8, 4, 0, -3, -3, -2, -1, -0, 0, 0, 0, -0})
-   ) filter (
+   ) filter_lp (
       .clk_i(clk),
       .rst_i(rst),
       .tick_i(tick_dec),
@@ -109,15 +108,35 @@ module Main(
       .signal_o()
    );
 
-   // CIC interoplator filter
+   // shot controller
+   logic shot;
+
+   // FIFO buffer
+
+   // switch output between reference and phase
+   logic signed[15:0] signal_int;
+   always_comb begin
+      if (SW[0] == 1) begin
+         signal_int <= signal_ref;
+         HEX0 = ~8'd001;
+      end
+      else begin
+         signal_int <= signal_phs;
+         HEX0 = ~8'd008;
+      end
+   end
+
+   // CIC interoplator filter (stages=4, factor=5)
    CICint interpolator (
       .clk_i(clk),
       .rst_i(rst),
       .tick_dec_i(tick_dec),
       .tick_i(tick),
-      .signal_i(signal_ref),
+      .signal_i(signal_int),
       .signal_o(signal_dac)
    );
+
+   // compensation filter for CIC interpolator
 
    // DAC writer at 1 MHz
    DacWriter writer (
